@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 import argparse
+import prompts
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -22,7 +23,9 @@ def main():
 
     gemini_response = client.models.generate_content(
         model = "gemini-2.5-flash",
-        contents = messages)
+        contents = messages,
+        config=types.GenerateContentConfig(system_instruction=prompts.system_prompt,temperature=0)
+    )
     
     if gemini_response is None:
         raise RuntimeError("Error receiving response from Gemini!")
